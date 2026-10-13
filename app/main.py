@@ -9,7 +9,7 @@ from app import __version__
 from app.config import settings
 from app.cache import price_cache
 from app.scheduler import start_scheduler, stop_scheduler, refresh_prices_task
-from app.security import verify_api_key
+from app.security import verify_api_key, verify_admin_key
 
 # Configure logging
 logging.basicConfig(
@@ -96,7 +96,7 @@ async def get_usd_price(
     return _build_response(cached_data, simple=simple)
 
 @app.post("/api/v1/refresh", tags=["Admin"])
-async def manual_refresh(_auth: str = Depends(verify_api_key)):
+async def manual_refresh(_auth: str = Depends(verify_admin_key)):
     """
     Force manual refresh of rates from all sources and update cache immediately.
     """

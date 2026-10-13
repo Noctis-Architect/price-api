@@ -17,10 +17,14 @@ def test_health_check():
     assert "status" in data
     assert "version" in data
 
-def test_unauthorized_access():
+def test_public_access():
     response = client.get("/api/v1/usd")
+    assert response.status_code == 200
+
+def test_unauthorized_admin_access():
+    response = client.post("/api/v1/refresh")
     assert response.status_code == 401
-    assert "Invalid or missing API key" in response.json()["detail"]["message"]
+    assert "Admin API key required" in response.json()["detail"]["message"]
 
 def test_authorized_with_header():
     # Warmup cache if empty
