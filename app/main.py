@@ -68,8 +68,8 @@ def _build_response(data: Dict[str, Any], simple: bool = False) -> Dict[str, Any
     response_payload["cache_age_seconds"] = round(cache_age, 2) if cache_age is not None else 0
     return response_payload
 
-@app.get("/", tags=["Currency Rates"])
-@app.get("/api/v1/usd", tags=["Currency Rates"])
+@app.api_route("/", methods=["GET", "HEAD"], tags=["Currency Rates"])
+@app.api_route("/api/v1/usd", methods=["GET", "HEAD"], tags=["Currency Rates"])
 async def get_usd_price(
     simple: bool = Query(
         False,
@@ -108,7 +108,7 @@ async def manual_refresh(_auth: str = Depends(verify_admin_key)):
         "data": cached_data
     }
 
-@app.get("/api/v1/health", tags=["Health"])
+@app.api_route("/api/v1/health", methods=["GET", "HEAD"], tags=["Health"])
 async def health_check():
     """Service health and cache status."""
     has_cache = price_cache.has_data
