@@ -16,8 +16,8 @@ async def verify_api_key(
     if not settings.REQUIRE_API_KEY:
         return "public"
     
-    # Check X-API-Key header or query param
-    key = header_key or query_key
+    # Check X-API-Key header or query param (?api_key=... or ?key=...)
+    key = header_key or query_key or request.query_params.get("key")
     
     # Check Authorization: Bearer <token>
     if not key:
